@@ -1,5 +1,6 @@
 package com.njstyle.jobschedulertest.job
 
+import android.annotation.TargetApi
 import android.app.job.JobInfo
 import android.app.job.JobParameters
 import android.app.job.JobScheduler
@@ -8,6 +9,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.net.*
 import android.net.wifi.WifiManager
+import android.os.Build
 import com.njstyle.jobschedulertest.common.LogMgr
 
 class ConnectivityJob: JobService() {
@@ -55,13 +57,12 @@ class ConnectivityJob: JobService() {
     }
 
     companion object {
+        @TargetApi(Build.VERSION_CODES.O)
         fun connectivityCheckJobSchedule(context: Context) {
             val jobScheduler = context.applicationContext.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
 
             val jobInfo = JobInfo.Builder(0, ComponentName(context.applicationContext, ConnectivityJob::class.java))
-                    .setMinimumLatency(1000)
-                    .setOverrideDeadline(2000)
-                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_METERED)
                     .setPersisted(true)
                     .build()
 
